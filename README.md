@@ -10,7 +10,7 @@ Grimm-user-pic also has a button to upload a custom image.
 
 These are the props that are active at this point
 
-...- url : this is the url where to upload the file
+- url : this is the url where to upload the file
 
 ## Events
 
