@@ -10,7 +10,14 @@ Grimm-user-pic also has a button to upload a custom image.
 
 These are the props that are active at this point
 
-- url : this is the url where to upload the file
+- :url : (string) This is the url where to upload the file, default is a empty string
+- :round : (boolean) Border radius of the image, if it's true the image is rounded, default is true
+- :background : (string) The color of the background, default is TRANSPARENT
+- :flat : (string) The style of the button, default is FALSE
+- :buttonColor : (string) The background-color of the button, default is "grey", you can use also gradient
+- :textColor : (string) The color of the button label, default is white
+- :navigationNextLabel : (string) NextArrow default is '▶'
+- :navigationPrevLabel : (string) PrevArrow default is '◀'
 
 ## Events
 

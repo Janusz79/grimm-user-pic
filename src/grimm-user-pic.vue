@@ -1,11 +1,13 @@
 <template>
-    <div class="userPanelFoto">
+    <div class="userPanelFoto" :class="{round:round}"  :style="{ backgroundColor: background}">
         <carousel   :navigationEnabled="true"
                     :perPage="1"
                     :paginationEnabled="false"
                     ref="carousel"
                     :loop="true"
                     @pageChange="handleSlideClick"
+                    :navigationNextLabel="navigationNextLabel"
+                    :navigationPrevLabel="navigationPrevLabel"
                     :navigate-to="selectedSlideIndex">
           <slide v-for="(slide, index) in slides"
                 class="image is-square"
@@ -16,7 +18,10 @@
         </carousel>
         <form method="post" enctype="multipart/form-data">
             <input type="file" name="fileToUpload" id="fileToUpload" @change="handleFileUpload($event.target.name, $event.target.files)">
-            <label for="fileToUpload" class="btn">Personalizza</label>
+            <label for="fileToUpload" 
+                :class="{btn:!flat, btnFlat:flat}"
+                :style="{background:buttonColor, color:textColor}"
+                >Personalizza</label>
         </form>
     </div>
 </template>
@@ -45,22 +50,51 @@
                 selectedSlideIndex:0            
             }
         },
-        // created(){
-        //     EventBus.$on('WAKEUP', () => {
-        //           return document.getElementsByClassName('VueCarousel-inner')[0].className += " wakeUp";
-        //         });
-        //     EventBus.$on('RESET', () => {
+        created(){
+            // EventBus.$on('WAKEUP', () => {
+            //       return document.getElementsByClassName('VueCarousel-inner')[0].className += " wakeUp";
+            //     });
+            // EventBus.$on('RESET', () => {
                 
-        //           return this.reset();
-        //         });
-        // },
+            //       return this.reset();
+            //     });
+        },
         mounted(){          
         },
         props:{
-            default:{
-                type:String,
-                default:'Data'
-            }
+            url:{
+                default:'',
+                type:String
+            },
+            round:{
+                default:true,
+                type:Boolean
+            },
+            flat:{
+                default:true,
+                type:Boolean
+            },
+            buttonColor:{
+                default:'grey',
+                type:String
+            },
+            textColor:{
+                default:'white',
+                type:String
+            },
+            background:{
+                default:'transparent',
+                type:String
+            },
+            navigationNextLabel:{
+                default:'▶',
+                type:String
+            },
+            navigationPrevLabel:{
+                default:'◀',
+                type:String
+            },
+
         },
         methods:{
             reset(){
@@ -85,7 +119,7 @@
             handleFileUpload(name, files){
                 var form_data = new FormData();
                 form_data.append('file',files[0]);
-                axios.post('/grimm-admin/service/addImage',form_data)
+                axios.post(this.url,form_data)
                 .then(function(response){
                     response = response.data;
                     if (this.slides.length> 6) {
@@ -130,7 +164,10 @@
     }
     .userPanelFoto img{
         width: 100%;
-        border-radius: 50000px;
+        
+    }
+    .round img{
+       border-radius: 50000px; 
     }
     .userPanelFoto form{
         height: 100%;
@@ -143,6 +180,67 @@
         overflow: hidden;
         position: absolute;
         z-index: -1;
+    }
+    .btn {
+        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));
+        background:-moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+        background:-webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+        background:-o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+        background:-ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+        background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);
+        background-color:#ededed;
+        -moz-border-radius:6px;
+        -webkit-border-radius:6px;
+        border-radius:6px;
+        border:1px solid #dcdcdc;
+        display:inline-block;
+        cursor:pointer;
+        color:#777777;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #ffffff;
+        margin-top: 18px !important;
+    }
+    .btn:hover {
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));
+        background:-moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background:-webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background:-o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background:-ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);
+        background-color:#dfdfdf;
+    }
+    .btn:active {
+        position:relative;
+        top:1px;
+    }
+
+    .btnFlat {
+        background-color:#ededed;
+        display:inline-block;
+        cursor:pointer;
+        color:#777777;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        margin-top: 18px !important;
+    }
+    .btnFlat:hover {
+        background-color:#dfdfdf;
+    }
+    .btnFlat:active {
+        position:relative;
+        top:1px;
     }
 
 </style>
