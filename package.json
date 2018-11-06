@@ -2,36 +2,35 @@
   "name": "grimmUserPic",
   "version": "1.0.0",
   "description": "This is a module component with a slide selection for a user avatar picture",
-
   "main": "dist/grimm-user-pic.umd.js",
   "module": "dist/grimm-user-pic.esm.js",
   "unpkg": "dist/grimm-user-pic.min.js",
   "browser": {
     "./sfc": "src/grimm-user-pic.vue"
   },
-
   "files": [
     "dist/*",
     "src/*"
   ],
-
   "scripts": {
     "build": "npm run build:unpkg & npm run build:es & npm run build:umd",
     "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/grimm-user-pic.umd.js",
     "build:es": "rollup --config build/rollup.config.js --format es --file dist/grimm-user-pic.esm.js",
     "build:unpkg": "rollup --config build/rollup.config.js --format iife --file dist/grimm-user-pic.min.js"
   },
-
   "dependencies": {
+    "axios": "^0.18.0"
   },
-
   "devDependencies": {
     "minimist": "^1.2.0",
     "rollup": "^0.66.2",
     "rollup-plugin-buble": "^0.19.2",
+    "rollup-plugin-img": "^1.1.0",
+    "rollup-plugin-rebase": "^2.0.4",
     "rollup-plugin-uglify-es": "0.0.1",
     "rollup-plugin-vue": "^4.3.0",
     "vue": "^2.5.16",
+    "vue-carousel": "^0.15.0",
     "vue-template-compiler": "^2.5.16"
   },
   "repository": {
@@ -53,4 +52,3 @@
   },
   "homepage": "https://github.com/Janusz79/grimm-user-pic#readme"
 }
-
