@@ -1,10 +1,28 @@
 # Grimm-user-pic
-## This is my first release, so please be kind
+
+### This is my first release, if anyone ever sees this, please be kind
+
+
 
 This is vue component which handles an avatar selection with the use of [vue-carousel](https://github.com/SSENSE/vue-carousel) by [SSENSE](https://github.com/SSENSE). Inseide the assets folder there are 6 .svg's, that are imported and build into the module, if you want to change the images you have to rebuild the module. 
 
 Grimm-user-pic also has a button to upload a custom image.
 
+To install run 
+
+	npm install grimm-user-pic --save
+
+To import as a component use
+
+	import userpic from "grimm-user-pic";
+
+Then you can simply use as such
+
+	<userpic />
+
+
+## IMPORTANT
+I am still working on this, at this point to work properly the service use to upload the file must respond with the full url where the file is stored
 
 ## Props
 
@@ -20,4 +38,6 @@ These are the props that are active at this point
 - :navigationPrevLabel : (string) PrevArrow default is '◀'
 
 ## Events
+
+Every time the value of the photo is changed the component emits an event called "input" with the url of the selected picture as payload
 
