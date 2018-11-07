@@ -1,6 +1,6 @@
 {
-  "name": "grimmUserPic",
-  "version": "1.0.0",
+  "name": "grimm-user-pic",
+  "version": "1.0.1",
   "description": "This is a module component with a slide selection for a user avatar picture",
   "main": "dist/grimm-user-pic.umd.js",
   "module": "dist/grimm-user-pic.esm.js",
@@ -22,19 +22,19 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@fortawesome/vue-fontawesome": "^0.1.2",
+    "vue-carousel": "^0.15.0",
     "axios": "^0.18.0"
   },
   "devDependencies": {
     "minimist": "^1.2.0",
     "rollup": "^0.66.2",
-    "rollup-plugin-buble": "^0.19.2",
+    "rollup-plugin-buble": "^0.19.4",
     "rollup-plugin-img": "^1.1.0",
     "rollup-plugin-rebase": "^2.0.4",
     "rollup-plugin-uglify-es": "0.0.1",
-    "rollup-plugin-vue": "^4.3.0",
+    "rollup-plugin-vue": "^4.3.2",
     "vue": "^2.5.16",
-    "vue-carousel": "^0.15.0",
-    "vue-template-compiler": "^2.5.16"
+    "vue-template-compiler": "^2.5.17"
   },
   "repository": {
     "type": "git",
