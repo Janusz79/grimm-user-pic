@@ -1,11 +1,13 @@
 // Import vue component
 import component from './grimm-user-pic.vue';
+import {VImg} from 'vuetify/lib';
 
 // install function executed by Vue.use()
 function install(Vue) {
   if (install.installed) return;
   install.installed = true;
   Vue.component('GrimmUserPic', component);
+  Vue.component(VImg);
 }
 
 // Create module definition for Vue.use()

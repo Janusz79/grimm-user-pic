@@ -26,6 +26,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-carousel": "^0.15.0",
+    "vue": "^2.5.17",
     "vuetify": "^1.3.7",
     "webpack": "^4.25.1"
   },
