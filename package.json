@@ -1,6 +1,6 @@
 {
   "name": "grimm-user-pic",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "This is a module component with a slide selection for a user avatar picture",
   "main": "dist/grimm-user-pic.umd.js",
   "module": "dist/grimm-user-pic.esm.js",
