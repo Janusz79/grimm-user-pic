@@ -1,5 +1,7 @@
 import { Carousel, Slide } from 'vue-carousel';
 import axios from 'axios';
+import Vue from 'vue';
+import Vuetify, { VApp, VImg } from 'vuetify/lib';
 
 var img1 = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOC4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGl2ZWxsb18xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDExOTAuNiA4NDEuOSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTE5MC42IDg0MS45IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxjaXJjbGUgZmlsbD0iI0ZGRkZGRiIgY3g9IjU5NS4zIiBjeT0iNDIwLjkiIHI9IjQyMC45Ii8+DQo8Zz4NCgk8Zz4NCgkJPGRlZnM+DQoJCQk8Y2lyY2xlIGlkPSJTVkdJRF8xXyIgY3g9IjU5NS4zIiBjeT0iNDIwLjkiIHI9IjQyMC45Ii8+DQoJCTwvZGVmcz4NCgkJPGNsaXBQYXRoIGlkPSJTVkdJRF8yXyI+DQoJCQk8dXNlIHhsaW5rOmhyZWY9IiNTVkdJRF8xXyIgIG92ZXJmbG93PSJ2aXNpYmxlIi8+DQoJCTwvY2xpcFBhdGg+DQoJCTxnIGNsaXAtcGF0aD0idXJsKCNTVkdJRF8yXykiPg0KCQkJPGc+DQoJCQkJPHBhdGggZmlsbD0iI0ZFQzQ5QyIgZD0iTTY4Mi4xLDYwMS4zYy00LDE2LjctOCw1NC4xLTEuMyw3Mi4yYzIuNyw2LjcsMTI5LjYsNTUuNSwxNDUsNjEuNWMzMS40LDEyLjcsNTkuNSwyNS40LDcxLjUsMzguOA0KCQkJCQljMTMuNCwxNC43LDIzLjQsNDAuMSwyMy40LDc0LjJjLTI1Ny45LDAtMzkyLjksMC02NTAuMSwwYzAtMzQuMSwxMC01OS41LDIzLjQtNzQuMmMxMi0xMi43LDM5LjQtMjYuMSw3MS41LTM4LjgNCgkJCQkJYzE1LjQtNiwxNDIuMy01NC44LDE0NS02MS41YzYuNy0xOCwyLjctNTUuNS0xLjMtNzIuMkM2MTIsNTQ2LjYsNTc3LjksNTQ2LjYsNjgyLjEsNjAxLjN6Ii8+DQoJCQkJPHBhdGggZmlsbD0iI0QyQTU4OCIgZD0iTTcxNC4yLDY5MC4yYzAsMC0zNS40LDUwLjEtNjIuOCw1My41Yy00MS40LDQuNy01MS40LTkuNC03OC44LTM2LjFjLTIyLjctMjIuNy01MC44LTUyLjgtNTkuNS03My41DQoJCQkJCWMwLDAtNC43LTQxLjQtOC00OC4xYy0zLjMtNi43LDc2LjgtMzYuNyw3Ni44LTM2LjdsODAuOC0xLjNsMTkuNCw1My41YzAsMC0xMCw1MC44LTEuMyw3Mi4yTDcxNC4yLDY5MC4yeiIvPg0KCQkJCTxnPg0KCQkJCQk8cGF0aCBmaWxsPSIjRkVDNDlDIiBkPSJNNDU4LjMsNDkzLjFjMCwwLTI0LjcsNy4zLTQyLjEtMTMuNHMtNTAuMS0xMTcuNiwyNS40LTEwNC4yTDQ1OC4zLDQ5My4xeiIvPg0KCQkJCQk8cGF0aCBmaWxsPSIjRkVDNDlDIiBkPSJNNzI4LjIsNDkzLjFjMCwwLDI0LjcsNy4zLDQyLjEtMTMuNGMxNy40LTIwLjcsNTAuMS0xMTcuNi0yNS40LTEwNC4yTDcyOC4yLDQ5My4xeiIvPg0KCQkJCQk8cGF0aCBmaWxsPSIjRkVDNDlDIiBkPSJNNjc4LjgsNjE4LjFjLTc0LjIsNzkuNS05Ni4yLDc5LjUtMTcwLjQsMEM0NTksNTY1LjMsNDUxLDUwOS44LDQ0Ny42LDQ0NC4zDQoJCQkJCQljLTMuMy01OC44LTE5LjQtMTQwLjMsMTIuNy0xNzkuMWM1MC44LTYwLjgsMjE1LjgtNjAuOCwyNjYuNiwwYzMyLjEsMzguOCwxNiwxMTkuNiwxMi43LDE3OS4xDQoJCQkJCQlDNzM2LjMsNTA5LjEsNzI4LjIsNTY0LjYsNjc4LjgsNjE4LjF6Ii8+DQoJCQkJPC9nPg0KCQkJPC9nPg0KCQkJPHBhdGggZmlsbD0iIzM1MzYzNCIgZD0iTTQzNC4yLDQzNi4zaDEyLjdjMCwwLTIxLjQtMTU5LDM5LjQtMTkxLjhzMjQxLjksMjIsMjU4LjYsNjcuNWwtNC43LDEyNC4zaDEzLjRsMTUuNC02MC4xDQoJCQkJYzAsMCwxMi0xMDAuMiw4LjctMTA5LjZjLTIuNy05LjQtMi04My41LTE2Ni40LTEyNC4zYzAsMC0xMjctMjYuNy0xNzIuNCw2NS41YzAsMC02LjcsMTYuNy00LDM4LjhjMCwwLTI5LjQsNC0yNy40LDU0LjgNCgkJCQlDNDA5LjUsMzUyLjEsNDM0LjIsNDM2LjMsNDM0LjIsNDM2LjN6Ii8+DQoJCQk8cGF0aCBmaWxsPSIjQzQ0OTVFIiBkPSJNNzA4LjksNjg3LjVjMzguOCwxNi43LDEwNi4yLDQzLjQsMTE2LjksNDcuNGMzMS40LDEyLjcsNTkuNSwyNS40LDcxLjUsMzguOA0KCQkJCWMxMy40LDE0LjcsMjMuNCw0MC4xLDIzLjQsNzQuMmMtMjU3LjksMC0zOTIuOSwwLTY1MC4xLDBjMC0zNC4xLDEwLTU5LjUsMjMuNC03NC4yYzEyLTEyLjcsMzkuNC0yNi4xLDcxLjUtMzguOA0KCQkJCWMxMC43LTQsNzguOC0zMC43LDExNy42LTQ3LjRjMjAsNDYuOCw2Mi44LDc4LjgsMTEyLjksNzguOEM2NDUuNCw3NjYuNCw2ODguOCw3MzQuMyw3MDguOSw2ODcuNXoiLz4NCgkJCTxwYXRoIGZpbGw9IiNBNjQzNTgiIGQ9Ik03MjAuMiw2OTIuMmMtMjAuNyw1Mi4xLTY5LjUsODYuMi0xMjQuMyw4Ni4ycy0xMDMuNi0zNC4xLTEyNC4zLTg2LjJsMTEuNC00LjcNCgkJCQljMjIuNyw0NC4xLDYwLjEsNzguOCwxMTMuNiw3OC44YzUzLjUsMCw5Mi45LTM0LjcsMTEyLjMtNzguOEw3MjAuMiw2OTIuMnoiLz4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjwvc3ZnPg0K";
 
@@ -14,142 +16,150 @@ var img5 = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idX
 var img6 = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOC4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGl2ZWxsb18xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDExOTAuNiA4NDEuOSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTE5MC42IDg0MS45IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxjaXJjbGUgZmlsbD0iI0ZGRkZGRiIgY3g9IjU5OC42IiBjeT0iNDE0LjkiIHI9IjQyMC45Ii8+DQo8Zz4NCgk8Zz4NCgkJPGRlZnM+DQoJCQk8Y2lyY2xlIGlkPSJTVkdJRF8xXyIgY3g9IjU5OC42IiBjeT0iNDE0LjkiIHI9IjQyMC45Ii8+DQoJCTwvZGVmcz4NCgkJPGNsaXBQYXRoIGlkPSJTVkdJRF8yXyI+DQoJCQk8dXNlIHhsaW5rOmhyZWY9IiNTVkdJRF8xXyIgIG92ZXJmbG93PSJ2aXNpYmxlIi8+DQoJCTwvY2xpcFBhdGg+DQoJCTxnIGNsaXAtcGF0aD0idXJsKCNTVkdJRF8yXykiPg0KCQkJPHBhdGggZmlsbD0iIzdEMzcyRSIgZD0iTTc4Ni40LDQxNC4zYy0yLDExMC4yLTM4LjgsMjE5LjgtNjIuOCwyMTguNWMtODYuMiwxLjMtMTY4LjQsMS4zLTI1NS45LDANCgkJCQljLTI0LjEsMC43LTYyLjgtMTA4LjItNjIuOC0yMTguNWMwLjctMTU3LDQwLjEtMjIwLjUsMTExLjYtMjU1LjJjNTAuMS0yNC4xLDEyMC4zLTI2LjcsMTY5LjcsMS4zDQoJCQkJQzc0OS42LDE5Ny4xLDc4OC40LDI4Niw3ODYuNCw0MTQuM3oiLz4NCgkJCTxwYXRoIGZpbGw9IiNGRUM0OUMiIGQ9Ik01MjAuNCw1OTRsOCwzNi4xYzgsMzYuNyw3LjMsMzkuNC0yMy40LDU1LjVjLTUwLjEsMjYuMS0xMzYuMyw0MC44LTE2Ni40LDg4LjkNCgkJCQljLTEwLjcsMTcuNC0xMS40LDM4LjgtMTEuNCw3NC4yYzE4MC40LDAsMzYxLjUsMCw1NDEuOSwwYzAtMzUuNC0wLjctNTYuOC0xMS40LTc0LjJjLTMwLjEtNDguMS0xMTYuMy02Mi44LTE2Ni40LTg4LjkNCgkJCQljLTMwLjctMTYtMzEuNC0xOC0yMy40LTU1LjVsOC0zNi4xQzU3My4yLDUzOS4yLDYyMy4zLDUzOS4yLDUyMC40LDU5NHoiLz4NCgkJCTxwYXRoIGZpbGw9IiNEMkE0ODciIGQ9Ik03MDguMiw2OTIuOWMwLDAtMjYuNywyNi43LTU2LjgsMjcuNGMtMzAuMSwwLTk3LjYtNDcuNC0xMjQuOS0xMDAuMmwtMTAtNDIuOGwxMDQuMi00NC44bDcyLjgsNDIuOA0KCQkJCUw2NzYuMSw1OTRsLTEyLjcsNTkuNWMwLDAtNC43LDE2LDE3LjQsMjYuN0M3MDMuNSw2OTAuOSw3MDguMiw2OTIuOSw3MDguMiw2OTIuOXoiLz4NCgkJCTxwYXRoIGZpbGw9IiNGRUM0OUMiIGQ9Ik01MDkuNyw1OTJjNjkuNSw3NS41LDEwOC4yLDc1LjUsMTc3LjEsMGM1NC44LTU4LjgsNDguMS0xMjIuMyw1MC44LTE5OS4xYzEuMy0zMy40LTEuMy02NC44LTExLjQtOTAuOQ0KCQkJCWMtMzkuNC0xMDUuNi0yMTcuOC0xMDUuNi0yNTcuMiwwYy05LjQsMjYuMS0xMi43LDU3LjUtMTEuNCw5MC45QzQ2MS42LDQ2OS43LDQ1NSw1MzIuNSw1MDkuNyw1OTJ6Ii8+DQoJCQk8cGF0aCBmaWxsPSIjN0QzNzJFIiBkPSJNNDc4LjMsMzYxLjVoMjQxLjJjMiw2OS41LDAuNywxMzctOC43LDIwMS44bDMyLjEsMC43bDguNy0yNTMuOWwtOTIuMi0xMjIuM2wtMTc3LjcsMjguN2wtMzIuNywxMDkuNg0KCQkJCWw4LjcsMjMxLjJsMjguNyw3LjNDNDc5LDQ5OC41LDQ3OC4zLDQyNi4zLDQ3OC4zLDM2MS41eiIvPg0KCQkJPHBhdGggZmlsbD0iI0ZGQ0M2MSIgZD0iTTQ3OC4zLDY5Ny42bC0xOCw2LjdsLTM4LjgsMTQzLjdoMzYyLjFsLTM4LjgtMTQwLjNsLTE2LTZjLTIwLDYwLjgtNjcuNSwxMDIuOS0xMjQuOSwxMDIuOQ0KCQkJCUM1NDcuMiw4MDQuNSw0OTcuNyw3NTksNDc4LjMsNjk3LjZ6Ii8+DQoJCTwvZz4NCgk8L2c+DQo8L2c+DQo8L3N2Zz4NCg==";
 
 //
-//import  EventBus  from '@/eventBus.js';
-var script = {
-    name: 'GrimmUserPic', // vue component name
-    data: function(){
-        return {
-            slides:[img1,
-                    img2,
-                    img3,
-                    img4,
-                    img5,
-                    img6],
-            selectedSlide:img1,   
-            selectedSlideIndex:0            
-        }
-    },
-    created: function created(){
-        // EventBus.$on('WAKEUP', () => {
-        //       return document.getElementsByClassName('VueCarousel-inner')[0].className += " wakeUp";
-        //     });
-        // EventBus.$on('RESET', () => {
-            
-        //       return this.reset();
-        //     });
-    },
-    mounted: function mounted(){          
-    },
-    props:{
-        url:{
-            default:'',
-            type:String
-        },
-        round:{
-            default:true,
-            type:Boolean
-        },
-        flat:{
-            default:true,
-            type:Boolean
-        },
-        buttonColor:{
-            default:'grey',
-            type:String
-        },
-        textColor:{
-            default:'white',
-            type:String
-        },
-        background:{
-            default:'transparent',
-            type:String
-        },
-        navigationNextLabel:{
-            default:'▶',
-            type:String
-        },
-        navigationPrevLabel:{
-            default:'◀',
-            type:String
-        },
-        upload:{
-            default:false,
-            type:Boolean
-        }
-
-    },
-    methods:{
-        reset: function reset(){
-            this.selectedSlideIndex = 0;
-            this.selectedSlide = img1;
-            if (this.slides.length>6) {
-                this.slides.pop(); 
+Vue.use(Vuetify, {
+  components: {
+    VApp: VApp, // required
+    VImg: VImg
+  }
+});
+    //import  EventBus  from '@/eventBus.js';
+    var script = {
+        name: 'GrimmUserPic', // vue component name
+        data: function(){
+            return {
+                slides:[img1,
+                        img2,
+                        img3,
+                        img4,
+                        img5,
+                        img6],
+                selectedSlide:img1,   
+                selectedSlideIndex:0            
             }
-            
         },
-        handleSlideClick: function handleSlideClick (dataset) {
-            this.selectedSlide = this.slides[dataset];
-            this.$emit('input', {
-                string: this.selectedSlide,
-            });
+        created: function created(){
+            // EventBus.$on('WAKEUP', () => {
+            //       return document.getElementsByClassName('VueCarousel-inner')[0].className += " wakeUp";
+            //     });
+            // EventBus.$on('RESET', () => {
+                
+            //       return this.reset();
+            //     });
         },
-        updateValue: function updateValue() {
-          this.$emit('input', {
-            string: this.selectedSlide,
-          });
+        mounted: function mounted(){          
         },
-        handleFileUpload: function handleFileUpload(name, files){
-            if (this.upload) {
-                var form_data = new FormData();
-                form_data.append('file',files[0]);
-                axios.post(this.url,form_data)
-                .then(function(response){
-                    response = response.data;
-                    if (this.slides.length> 6) {
-                        this.slides.pop();
-                        this.slides.push(response.outsidePath);
-                    }else{
-                        this.slides.push(response.outsidePath);
-                    }
-                    this.selectedSlide = response.outsidePath;
-                    setTimeout(function() {
-                        this.selectedSlideIndex = 6;
-                        this.$emit('input', {
-                            string: this.selectedSlide,
-                        });
-                    }.bind(this), 100);
-                }.bind(this));
-            }else{
-                var reader= new FileReader();
-                reader.addEventListener("load", function () {
-                    if (this.slides.length > 6) {
-                        this.slides.pop();
-                        this.slides.push(reader.result);
-                    }else{
-                        this.slides.push(reader.result);
-                    }
-                    this.selectedSlide = reader.result;
-                    this.selectedSlideIndex = this.slides.length-1;
-                    this.$emit('inputNoUpload', {
-                        file: files[0]
-                    });
-                }.bind(this), false);
+        props:{
+            url:{
+                default:'',
+                type:String
+            },
+            round:{
+                default:true,
+                type:Boolean
+            },
+            flat:{
+                default:true,
+                type:Boolean
+            },
+            buttonColor:{
+                default:'grey',
+                type:String
+            },
+            textColor:{
+                default:'white',
+                type:String
+            },
+            background:{
+                default:'transparent',
+                type:String
+            },
+            navigationNextLabel:{
+                default:'▶',
+                type:String
+            },
+            navigationPrevLabel:{
+                default:'◀',
+                type:String
+            },
+            upload:{
+                default:false,
+                type:Boolean
+            }
 
-                if (files) {
-                    reader.readAsDataURL(files[0]);
+        },
+        methods:{
+            reset: function reset(){
+                this.selectedSlideIndex = 0;
+                this.selectedSlide = img1;
+                if (this.slides.length>6) {
+                    this.slides.pop(); 
                 }
-            }
-            
-            
-        }
-    },
-    components:{
-        Carousel: Carousel,
-        Slide: Slide
-    }
+                
+            },
+            handleSlideClick: function handleSlideClick (dataset) {
+                this.selectedSlide = this.slides[dataset];
+                this.$emit('input', {
+                    string: this.selectedSlide,
+                });
+            },
+            updateValue: function updateValue() {
+              this.$emit('input', {
+                string: this.selectedSlide,
+              });
+            },
+            handleFileUpload: function handleFileUpload(name, files){
+                if (this.upload) {
+                    var form_data = new FormData();
+                    form_data.append('file',files[0]);
+                    axios.post(this.url,form_data)
+                    .then(function(response){
+                        response = response.data;
+                        if (this.slides.length> 6) {
+                            this.slides.pop();
+                            this.slides.push(response.outsidePath);
+                        }else{
+                            this.slides.push(response.outsidePath);
+                        }
+                        this.selectedSlide = response.outsidePath;
+                        setTimeout(function() {
+                            this.selectedSlideIndex = 6;
+                            this.$emit('input', {
+                                string: this.selectedSlide,
+                            });
+                        }.bind(this), 100);
+                    }.bind(this));
+                }else{
+                    var reader= new FileReader();
+                    reader.addEventListener("load", function () {
+                        if (this.slides.length > 6) {
+                            this.slides.pop();
+                            this.slides.push(reader.result);
+                        }else{
+                            this.slides.push(reader.result);
+                        }
+                        this.selectedSlide = reader.result;
+                        this.selectedSlideIndex = this.slides.length-1;
+                        this.$emit('inputNoUpload', {
+                            file: files[0]
+                        });
+                    }.bind(this), false);
 
-};
+                    if (files) {
+                        reader.readAsDataURL(files[0]);
+                    }
+                }
+                
+                
+            }
+        },
+        components:{
+            Carousel: Carousel,
+            Slide: Slide,
+            VApp: VApp, // required
+            VImg: VImg
+        }
+
+    };
 
 /* script */
             var __vue_script__ = script;
@@ -190,7 +200,12 @@ var __vue_render__ = function() {
               staticClass: "image is-square",
               attrs: { data: _vm.slides }
             },
-            [_c("img", { attrs: { src: slide, alt: "", "aspect-ratio": "1" } })]
+            [
+              _c("v-img", {
+                attrs: { src: slide, alt: "", "aspect-ratio": "1" }
+              })
+            ],
+            1
           )
         })
       ),
@@ -229,11 +244,11 @@ __vue_render__._withStripped = true;
   /* style */
   var __vue_inject_styles__ = function (inject) {
     if (!inject) { return }
-    inject("data-v-6313ed70_0", { source: "\n.userPanelFoto[data-v-6313ed70]{\n    padding-left: 18px;\n    padding-right: 18px;\n    display: flex;\n    flex-direction:column;\n    height: 100%;\n}\n.userPanelFoto label[data-v-6313ed70]{\n    margin:auto;\n}\n.userPanelFoto img[data-v-6313ed70]{\n    width: 100%;\n}\n.round img[data-v-6313ed70]{\n   border-radius: 50000px;\n}\n.userPanelFoto form[data-v-6313ed70]{\n    height: 100%;\n    display: flex;\n}\n.userPanelFoto input[data-v-6313ed70]{\n    width: 0.1px;\n    height: 0.1px;\n    opacity: 0;\n    overflow: hidden;\n    position: absolute;\n    z-index: -1;\n}\n.btn[data-v-6313ed70] {\n    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;\n    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;\n    box-shadow:inset 0px 1px 0px 0px #ffffff;\n    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));\n    background:-moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:-webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:-o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:-ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);\n    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);\n    background-color:#ededed;\n    -moz-border-radius:6px;\n    -webkit-border-radius:6px;\n    border-radius:6px;\n    border:1px solid #dcdcdc;\n    display:inline-block;\n    cursor:pointer;\n    color:#777777;\n    font-family:Arial;\n    font-size:15px;\n    font-weight:bold;\n    padding:6px 24px;\n    text-decoration:none;\n    text-shadow:0px 1px 0px #ffffff;\n    margin-top: 18px !important;\n}\n.btn[data-v-6313ed70]:hover {\n    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));\n    background:-moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:-webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:-o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:-ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);\n    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);\n    background-color:#dfdfdf;\n}\n.btn[data-v-6313ed70]:active {\n    position:relative;\n    top:1px;\n}\n.btnFlat[data-v-6313ed70] {\n    background-color:#ededed;\n    display:inline-block;\n    cursor:pointer;\n    color:#777777;\n    font-family:Arial;\n    font-size:15px;\n    font-weight:bold;\n    padding:6px 24px;\n    text-decoration:none;\n    margin-top: 18px !important;\n}\n.btnFlat[data-v-6313ed70]:hover {\n    background-color:#dfdfdf;\n}\n.btnFlat[data-v-6313ed70]:active {\n    position:relative;\n    top:1px;\n}\n\n", map: {"version":3,"sources":["/Users/davidesimoncini/Documents/GrimmNodeModules/grimm-user-pic/src/grimm-user-pic.vue"],"names":[],"mappings":";AA+KA;IACA,mBAAA;IACA,oBAAA;IACA,cAAA;IACA,sBAAA;IACA,aAAA;CACA;AAEA;IACA,YAAA;CACA;AACA;IACA,YAAA;CAEA;AACA;GACA,uBAAA;CACA;AACA;IACA,aAAA;IACA,cAAA;CACA;AACA;IACA,aAAA;IACA,cAAA;IACA,WAAA;IACA,iBAAA;IACA,mBAAA;IACA,YAAA;CACA;AACA;IACA,8CAAA;IACA,iDAAA;IACA,yCAAA;IACA,8GAAA;IACA,+DAAA;IACA,kEAAA;IACA,6DAAA;IACA,8DAAA;IACA,gEAAA;IACA,iHAAA;IACA,yBAAA;IACA,uBAAA;IACA,0BAAA;IACA,kBAAA;IACA,yBAAA;IACA,qBAAA;IACA,eAAA;IACA,cAAA;IACA,kBAAA;IACA,eAAA;IACA,iBAAA;IACA,iBAAA;IACA,qBAAA;IACA,gCAAA;IACA,4BAAA;CACA;AACA;IACA,8GAAA;IACA,+DAAA;IACA,kEAAA;IACA,6DAAA;IACA,8DAAA;IACA,gEAAA;IACA,iHAAA;IACA,yBAAA;CACA;AACA;IACA,kBAAA;IACA,QAAA;CACA;AAEA;IACA,yBAAA;IACA,qBAAA;IACA,eAAA;IACA,cAAA;IACA,kBAAA;IACA,eAAA;IACA,iBAAA;IACA,iBAAA;IACA,qBAAA;IACA,4BAAA;CACA;AACA;IACA,yBAAA;CACA;AACA;IACA,kBAAA;IACA,QAAA;CACA","file":"grimm-user-pic.vue","sourcesContent":["<template>\n    <div class=\"userPanelFoto\" :class=\"{round:round}\"  :style=\"{ backgroundColor: background}\">\n        <carousel   :navigationEnabled=\"true\"\n                    :perPage=\"1\"\n                    :paginationEnabled=\"false\"\n                    ref=\"carousel\"\n                    :loop=\"true\"\n                    @pageChange=\"handleSlideClick\"\n                    :navigationNextLabel=\"navigationNextLabel\"\n                    :navigationPrevLabel=\"navigationPrevLabel\"\n                    :navigate-to=\"selectedSlideIndex\">\n          <slide v-for=\"(slide, index) in slides\"\n                class=\"image is-square\"\n                v-bind:data=\"slides\"\n                v-bind:key=\"index\">\n            <img :src=\"slide\" alt=\"\" aspect-ratio=\"1\">\n          </slide>\n        </carousel>\n        <form method=\"post\" enctype=\"multipart/form-data\">\n            <input type=\"file\" name=\"fileToUpload\" id=\"fileToUpload\" @change=\"handleFileUpload($event.target.name, $event.target.files)\">\n            <label for=\"fileToUpload\" \n                :class=\"{btn:!flat, btnFlat:flat}\"\n                :style=\"{background:buttonColor, color:textColor}\"\n                >Personalizza</label>\n        </form>\n    </div>\n</template>\n\n<script>\n    import { Carousel, Slide } from 'vue-carousel';\n    import axios from 'axios';\n    import img1 from './assets/ProfiloUomo_1.svg';\n    import img2 from './assets/ProfiloUomo_2.svg';\n    import img3 from './assets/ProfiloUomo_3.svg';\n    import img4 from './assets/ProfiloDonna_1.svg';\n    import img5 from './assets/ProfiloDonna_2.svg';\n    import img6 from './assets/ProfiloDonna_3.svg';\n    //import  EventBus  from '@/eventBus.js';\n    export default{\n        name: 'GrimmUserPic', // vue component name\n        data: function(){\n            return{\n                slides:[img1,\n                        img2,\n                        img3,\n                        img4,\n                        img5,\n                        img6],\n                selectedSlide:img1,   \n                selectedSlideIndex:0            \n            }\n        },\n        created(){\n            // EventBus.$on('WAKEUP', () => {\n            //       return document.getElementsByClassName('VueCarousel-inner')[0].className += \" wakeUp\";\n            //     });\n            // EventBus.$on('RESET', () => {\n                \n            //       return this.reset();\n            //     });\n        },\n        mounted(){          \n        },\n        props:{\n            url:{\n                default:'',\n                type:String\n            },\n            round:{\n                default:true,\n                type:Boolean\n            },\n            flat:{\n                default:true,\n                type:Boolean\n            },\n            buttonColor:{\n                default:'grey',\n                type:String\n            },\n            textColor:{\n                default:'white',\n                type:String\n            },\n            background:{\n                default:'transparent',\n                type:String\n            },\n            navigationNextLabel:{\n                default:'▶',\n                type:String\n            },\n            navigationPrevLabel:{\n                default:'◀',\n                type:String\n            },\n            upload:{\n                default:false,\n                type:Boolean\n            }\n\n        },\n        methods:{\n            reset(){\n                this.selectedSlideIndex = 0;\n                this.selectedSlide = img1;\n                if (this.slides.length>6) {\n                    this.slides.pop(); \n                }\n                \n            },\n            handleSlideClick (dataset) {\n                this.selectedSlide = this.slides[dataset];\n                this.$emit('input', {\n                    string: this.selectedSlide,\n                });\n            },\n            updateValue() {\n              this.$emit('input', {\n                string: this.selectedSlide,\n              })\n            },\n            handleFileUpload(name, files){\n                if (this.upload) {\n                    var form_data = new FormData();\n                    form_data.append('file',files[0]);\n                    axios.post(this.url,form_data)\n                    .then(function(response){\n                        response = response.data;\n                        if (this.slides.length> 6) {\n                            this.slides.pop();\n                            this.slides.push(response.outsidePath);\n                        }else{\n                            this.slides.push(response.outsidePath);\n                        }\n                        this.selectedSlide = response.outsidePath;\n                        setTimeout(function() {\n                            this.selectedSlideIndex = 6;\n                            this.$emit('input', {\n                                string: this.selectedSlide,\n                            });\n                        }.bind(this), 100);\n                    }.bind(this))\n                }else{\n                    var reader= new FileReader();\n                    reader.addEventListener(\"load\", function () {\n                        if (this.slides.length > 6) {\n                            this.slides.pop();\n                            this.slides.push(reader.result);\n                        }else{\n                            this.slides.push(reader.result);\n                        }\n                        this.selectedSlide = reader.result;\n                        this.selectedSlideIndex = this.slides.length-1;\n                        this.$emit('inputNoUpload', {\n                            file: files[0]\n                        });\n                    }.bind(this), false);\n\n                    if (files) {\n                        reader.readAsDataURL(files[0]);\n                    }\n                }\n                \n                \n            }\n        },\n        components:{\n            Carousel,\n            Slide\n        }\n\n    };\n</script>\n<style scoped>\n    .userPanelFoto{\n        padding-left: 18px;\n        padding-right: 18px;\n        display: flex;\n        flex-direction:column;\n        height: 100%;\n    }\n                    \n    .userPanelFoto label{\n        margin:auto;\n    }\n    .userPanelFoto img{\n        width: 100%;\n        \n    }\n    .round img{\n       border-radius: 50000px; \n    }\n    .userPanelFoto form{\n        height: 100%;\n        display: flex;\n    }\n    .userPanelFoto input{\n        width: 0.1px;\n        height: 0.1px;\n        opacity: 0;\n        overflow: hidden;\n        position: absolute;\n        z-index: -1;\n    }\n    .btn {\n        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;\n        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;\n        box-shadow:inset 0px 1px 0px 0px #ffffff;\n        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));\n        background:-moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:-webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:-o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:-ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);\n        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);\n        background-color:#ededed;\n        -moz-border-radius:6px;\n        -webkit-border-radius:6px;\n        border-radius:6px;\n        border:1px solid #dcdcdc;\n        display:inline-block;\n        cursor:pointer;\n        color:#777777;\n        font-family:Arial;\n        font-size:15px;\n        font-weight:bold;\n        padding:6px 24px;\n        text-decoration:none;\n        text-shadow:0px 1px 0px #ffffff;\n        margin-top: 18px !important;\n    }\n    .btn:hover {\n        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));\n        background:-moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:-webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:-o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:-ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);\n        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);\n        background-color:#dfdfdf;\n    }\n    .btn:active {\n        position:relative;\n        top:1px;\n    }\n\n    .btnFlat {\n        background-color:#ededed;\n        display:inline-block;\n        cursor:pointer;\n        color:#777777;\n        font-family:Arial;\n        font-size:15px;\n        font-weight:bold;\n        padding:6px 24px;\n        text-decoration:none;\n        margin-top: 18px !important;\n    }\n    .btnFlat:hover {\n        background-color:#dfdfdf;\n    }\n    .btnFlat:active {\n        position:relative;\n        top:1px;\n    }\n\n</style>"]}, media: undefined });
+    inject("data-v-ec651282_0", { source: "\n.userPanelFoto[data-v-ec651282]{\n    padding-left: 18px;\n    padding-right: 18px;\n    display: flex;\n    flex-direction:column;\n    height: 100%;\n}\n.userPanelFoto label[data-v-ec651282]{\n    margin:auto;\n}\n.userPanelFoto img[data-v-ec651282]{\n    width: 100%;\n}\n.round img[data-v-ec651282]{\n   border-radius: 50000px;\n}\n.userPanelFoto form[data-v-ec651282]{\n    height: 100%;\n    display: flex;\n}\n.userPanelFoto input[data-v-ec651282]{\n    width: 0.1px;\n    height: 0.1px;\n    opacity: 0;\n    overflow: hidden;\n    position: absolute;\n    z-index: -1;\n}\n.btn[data-v-ec651282] {\n    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;\n    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;\n    box-shadow:inset 0px 1px 0px 0px #ffffff;\n    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));\n    background:-moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:-webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:-o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:-ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n    background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);\n    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);\n    background-color:#ededed;\n    -moz-border-radius:6px;\n    -webkit-border-radius:6px;\n    border-radius:6px;\n    border:1px solid #dcdcdc;\n    display:inline-block;\n    cursor:pointer;\n    color:#777777;\n    font-family:Arial;\n    font-size:15px;\n    font-weight:bold;\n    padding:6px 24px;\n    text-decoration:none;\n    text-shadow:0px 1px 0px #ffffff;\n    margin-top: 18px !important;\n}\n.btn[data-v-ec651282]:hover {\n    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));\n    background:-moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:-webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:-o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:-ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n    background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);\n    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);\n    background-color:#dfdfdf;\n}\n.btn[data-v-ec651282]:active {\n    position:relative;\n    top:1px;\n}\n.btnFlat[data-v-ec651282] {\n    background-color:#ededed;\n    display:inline-block;\n    cursor:pointer;\n    color:#777777;\n    font-family:Arial;\n    font-size:15px;\n    font-weight:bold;\n    padding:6px 24px;\n    text-decoration:none;\n    margin-top: 18px !important;\n}\n.btnFlat[data-v-ec651282]:hover {\n    background-color:#dfdfdf;\n}\n.btnFlat[data-v-ec651282]:active {\n    position:relative;\n    top:1px;\n}\n\n", map: {"version":3,"sources":["/Users/davidesimoncini/Documents/GrimmNodeModules/grimm-user-pic/src/grimm-user-pic.vue"],"names":[],"mappings":";AA4LA;IACA,mBAAA;IACA,oBAAA;IACA,cAAA;IACA,sBAAA;IACA,aAAA;CACA;AAEA;IACA,YAAA;CACA;AACA;IACA,YAAA;CAEA;AACA;GACA,uBAAA;CACA;AACA;IACA,aAAA;IACA,cAAA;CACA;AACA;IACA,aAAA;IACA,cAAA;IACA,WAAA;IACA,iBAAA;IACA,mBAAA;IACA,YAAA;CACA;AACA;IACA,8CAAA;IACA,iDAAA;IACA,yCAAA;IACA,8GAAA;IACA,+DAAA;IACA,kEAAA;IACA,6DAAA;IACA,8DAAA;IACA,gEAAA;IACA,iHAAA;IACA,yBAAA;IACA,uBAAA;IACA,0BAAA;IACA,kBAAA;IACA,yBAAA;IACA,qBAAA;IACA,eAAA;IACA,cAAA;IACA,kBAAA;IACA,eAAA;IACA,iBAAA;IACA,iBAAA;IACA,qBAAA;IACA,gCAAA;IACA,4BAAA;CACA;AACA;IACA,8GAAA;IACA,+DAAA;IACA,kEAAA;IACA,6DAAA;IACA,8DAAA;IACA,gEAAA;IACA,iHAAA;IACA,yBAAA;CACA;AACA;IACA,kBAAA;IACA,QAAA;CACA;AAEA;IACA,yBAAA;IACA,qBAAA;IACA,eAAA;IACA,cAAA;IACA,kBAAA;IACA,eAAA;IACA,iBAAA;IACA,iBAAA;IACA,qBAAA;IACA,4BAAA;CACA;AACA;IACA,yBAAA;CACA;AACA;IACA,kBAAA;IACA,QAAA;CACA","file":"grimm-user-pic.vue","sourcesContent":["<template>\n    <div class=\"userPanelFoto\" :class=\"{round:round}\"  :style=\"{ backgroundColor: background}\">\n        <carousel   :navigationEnabled=\"true\"\n                    :perPage=\"1\"\n                    :paginationEnabled=\"false\"\n                    ref=\"carousel\"\n                    :loop=\"true\"\n                    @pageChange=\"handleSlideClick\"\n                    :navigationNextLabel=\"navigationNextLabel\"\n                    :navigationPrevLabel=\"navigationPrevLabel\"\n                    :navigate-to=\"selectedSlideIndex\">\n          <slide v-for=\"(slide, index) in slides\"\n                class=\"image is-square\"\n                v-bind:data=\"slides\"\n                v-bind:key=\"index\">\n            <v-img :src=\"slide\" alt=\"\" aspect-ratio=\"1\" />\n          </slide>\n        </carousel>\n        <form method=\"post\" enctype=\"multipart/form-data\">\n            <input type=\"file\" name=\"fileToUpload\" id=\"fileToUpload\" @change=\"handleFileUpload($event.target.name, $event.target.files)\">\n            <label for=\"fileToUpload\" \n                :class=\"{btn:!flat, btnFlat:flat}\"\n                :style=\"{background:buttonColor, color:textColor}\"\n                >Personalizza</label>\n        </form>\n    </div>\n</template>\n\n<script>\n    import { Carousel, Slide } from 'vue-carousel';\n    import axios from 'axios';\n    import img1 from './assets/ProfiloUomo_1.svg';\n    import img2 from './assets/ProfiloUomo_2.svg';\n    import img3 from './assets/ProfiloUomo_3.svg';\n    import img4 from './assets/ProfiloDonna_1.svg';\n    import img5 from './assets/ProfiloDonna_2.svg';\n    import img6 from './assets/ProfiloDonna_3.svg';\nimport Vue from 'vue';\nimport Vuetify, {\n  VApp, // required\n  VImg\n} from 'vuetify/lib';\nVue.use(Vuetify, {\n  components: {\n    VApp, // required\n    VImg\n  }\n})\n    //import  EventBus  from '@/eventBus.js';\n    export default{\n        name: 'GrimmUserPic', // vue component name\n        data: function(){\n            return{\n                slides:[img1,\n                        img2,\n                        img3,\n                        img4,\n                        img5,\n                        img6],\n                selectedSlide:img1,   \n                selectedSlideIndex:0            \n            }\n        },\n        created(){\n            // EventBus.$on('WAKEUP', () => {\n            //       return document.getElementsByClassName('VueCarousel-inner')[0].className += \" wakeUp\";\n            //     });\n            // EventBus.$on('RESET', () => {\n                \n            //       return this.reset();\n            //     });\n        },\n        mounted(){          \n        },\n        props:{\n            url:{\n                default:'',\n                type:String\n            },\n            round:{\n                default:true,\n                type:Boolean\n            },\n            flat:{\n                default:true,\n                type:Boolean\n            },\n            buttonColor:{\n                default:'grey',\n                type:String\n            },\n            textColor:{\n                default:'white',\n                type:String\n            },\n            background:{\n                default:'transparent',\n                type:String\n            },\n            navigationNextLabel:{\n                default:'▶',\n                type:String\n            },\n            navigationPrevLabel:{\n                default:'◀',\n                type:String\n            },\n            upload:{\n                default:false,\n                type:Boolean\n            }\n\n        },\n        methods:{\n            reset(){\n                this.selectedSlideIndex = 0;\n                this.selectedSlide = img1;\n                if (this.slides.length>6) {\n                    this.slides.pop(); \n                }\n                \n            },\n            handleSlideClick (dataset) {\n                this.selectedSlide = this.slides[dataset];\n                this.$emit('input', {\n                    string: this.selectedSlide,\n                });\n            },\n            updateValue() {\n              this.$emit('input', {\n                string: this.selectedSlide,\n              })\n            },\n            handleFileUpload(name, files){\n                if (this.upload) {\n                    var form_data = new FormData();\n                    form_data.append('file',files[0]);\n                    axios.post(this.url,form_data)\n                    .then(function(response){\n                        response = response.data;\n                        if (this.slides.length> 6) {\n                            this.slides.pop();\n                            this.slides.push(response.outsidePath);\n                        }else{\n                            this.slides.push(response.outsidePath);\n                        }\n                        this.selectedSlide = response.outsidePath;\n                        setTimeout(function() {\n                            this.selectedSlideIndex = 6;\n                            this.$emit('input', {\n                                string: this.selectedSlide,\n                            });\n                        }.bind(this), 100);\n                    }.bind(this))\n                }else{\n                    var reader= new FileReader();\n                    reader.addEventListener(\"load\", function () {\n                        if (this.slides.length > 6) {\n                            this.slides.pop();\n                            this.slides.push(reader.result);\n                        }else{\n                            this.slides.push(reader.result);\n                        }\n                        this.selectedSlide = reader.result;\n                        this.selectedSlideIndex = this.slides.length-1;\n                        this.$emit('inputNoUpload', {\n                            file: files[0]\n                        });\n                    }.bind(this), false);\n\n                    if (files) {\n                        reader.readAsDataURL(files[0]);\n                    }\n                }\n                \n                \n            }\n        },\n        components:{\n            Carousel,\n            Slide,\n            VApp, // required\n            VImg\n        }\n\n    };\n</script>\n<style scoped>\n    .userPanelFoto{\n        padding-left: 18px;\n        padding-right: 18px;\n        display: flex;\n        flex-direction:column;\n        height: 100%;\n    }\n                    \n    .userPanelFoto label{\n        margin:auto;\n    }\n    .userPanelFoto img{\n        width: 100%;\n        \n    }\n    .round img{\n       border-radius: 50000px; \n    }\n    .userPanelFoto form{\n        height: 100%;\n        display: flex;\n    }\n    .userPanelFoto input{\n        width: 0.1px;\n        height: 0.1px;\n        opacity: 0;\n        overflow: hidden;\n        position: absolute;\n        z-index: -1;\n    }\n    .btn {\n        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;\n        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;\n        box-shadow:inset 0px 1px 0px 0px #ffffff;\n        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));\n        background:-moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:-webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:-o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:-ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);\n        background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);\n        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);\n        background-color:#ededed;\n        -moz-border-radius:6px;\n        -webkit-border-radius:6px;\n        border-radius:6px;\n        border:1px solid #dcdcdc;\n        display:inline-block;\n        cursor:pointer;\n        color:#777777;\n        font-family:Arial;\n        font-size:15px;\n        font-weight:bold;\n        padding:6px 24px;\n        text-decoration:none;\n        text-shadow:0px 1px 0px #ffffff;\n        margin-top: 18px !important;\n    }\n    .btn:hover {\n        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));\n        background:-moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:-webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:-o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:-ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);\n        background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);\n        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);\n        background-color:#dfdfdf;\n    }\n    .btn:active {\n        position:relative;\n        top:1px;\n    }\n\n    .btnFlat {\n        background-color:#ededed;\n        display:inline-block;\n        cursor:pointer;\n        color:#777777;\n        font-family:Arial;\n        font-size:15px;\n        font-weight:bold;\n        padding:6px 24px;\n        text-decoration:none;\n        margin-top: 18px !important;\n    }\n    .btnFlat:hover {\n        background-color:#dfdfdf;\n    }\n    .btnFlat:active {\n        position:relative;\n        top:1px;\n    }\n\n</style>"]}, media: undefined });
 
   };
   /* scoped */
-  var __vue_scope_id__ = "data-v-6313ed70";
+  var __vue_scope_id__ = "data-v-ec651282";
   /* module identifier */
   var __vue_module_identifier__ = undefined;
   /* functional template */
@@ -360,10 +375,10 @@ __vue_render__._withStripped = true;
 // Import vue component
 
 // install function executed by Vue.use()
-function install(Vue) {
+function install(Vue$$1) {
   if (install.installed) { return; }
   install.installed = true;
-  Vue.component('GrimmUserPic', component);
+  Vue$$1.component('GrimmUserPic', component);
 }
 
 // Create module definition for Vue.use()
