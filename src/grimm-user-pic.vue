@@ -13,7 +13,7 @@
                 class="image is-square"
                 v-bind:data="slides"
                 v-bind:key="index">
-            <img :src="slide" alt="">
+            <img :src="slide" alt="" aspect-ratio="1">
           </slide>
         </carousel>
         <form method="post" enctype="multipart/form-data">
@@ -94,6 +94,10 @@
                 default:'◀',
                 type:String
             },
+            upload:{
+                default:false,
+                type:Boolean
+            }
 
         },
         methods:{
@@ -117,29 +121,47 @@
               })
             },
             handleFileUpload(name, files){
-                var form_data = new FormData();
-                form_data.append('file',files[0]);
-                axios.post(this.url,form_data)
-                .then(function(response){
-                    response = response.data;
-                    if (this.slides.length> 6) {
-                        this.slides.pop();
-                        this.slides.push(response.outsidePath);
-                        
-                    }else{
-                        this.slides.push(response.outsidePath);
-                        
-                    }
-                    this.selectedSlide = response.outsidePath;
-                    setTimeout(function() {
-                        this.selectedSlideIndex = 6;
-                        this.$emit('input', {
-                            string: this.selectedSlide,
+                if (this.upload) {
+                    var form_data = new FormData();
+                    form_data.append('file',files[0]);
+                    axios.post(this.url,form_data)
+                    .then(function(response){
+                        response = response.data;
+                        if (this.slides.length> 6) {
+                            this.slides.pop();
+                            this.slides.push(response.outsidePath);
+                        }else{
+                            this.slides.push(response.outsidePath);
+                        }
+                        this.selectedSlide = response.outsidePath;
+                        setTimeout(function() {
+                            this.selectedSlideIndex = 6;
+                            this.$emit('input', {
+                                string: this.selectedSlide,
+                            });
+                        }.bind(this), 100);
+                    }.bind(this))
+                }else{
+                    var reader= new FileReader();
+                    reader.addEventListener("load", function () {
+                        if (this.slides.length > 6) {
+                            this.slides.pop();
+                            this.slides.push(reader.result);
+                        }else{
+                            this.slides.push(reader.result);
+                        }
+                        this.selectedSlide = reader.result;
+                        this.selectedSlideIndex = this.slides.length-1;
+                        this.$emit('inputNoUpload', {
+                            file: files[0]
                         });
+                    }.bind(this), false);
 
-                    }.bind(this), 100);
-                    
-                }.bind(this))
+                    if (files) {
+                        reader.readAsDataURL(files[0]);
+                    }
+                }
+                
                 
             }
         },

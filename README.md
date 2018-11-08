@@ -4,7 +4,7 @@
 
 
 
-This is vue component which handles an avatar selection with the use of [vue-carousel](https://github.com/SSENSE/vue-carousel) by [SSENSE](https://github.com/SSENSE). Inside the assets folder there are 6 .svg's, that are imported and build into the module, if you want to change the images you have to rebuild the module. 
+This is a vue component which handles an avatar selection with the use of [vue-carousel](https://github.com/SSENSE/vue-carousel) by [SSENSE](https://github.com/SSENSE). Inside the assets folder there are 6 .svg's, that are imported and build into the module, if you want to change the images you have to rebuild the module. 
 
 Grimm-user-pic also has a button to upload a custom image.
 
