@@ -13,7 +13,7 @@
                 class="image is-square"
                 v-bind:data="slides"
                 v-bind:key="index">
-            <img :src="slide" alt="" aspect-ratio="1">
+            <v-img :src="slide" alt="" aspect-ratio="1" />
           </slide>
         </carousel>
         <form method="post" enctype="multipart/form-data">
@@ -35,6 +35,17 @@
     import img4 from './assets/ProfiloDonna_1.svg';
     import img5 from './assets/ProfiloDonna_2.svg';
     import img6 from './assets/ProfiloDonna_3.svg';
+import Vue from 'vue';
+import Vuetify, {
+  VApp, // required
+  VImg
+} from 'vuetify/lib';
+Vue.use(Vuetify, {
+  components: {
+    VApp, // required
+    VImg
+  }
+})
     //import  EventBus  from '@/eventBus.js';
     export default{
         name: 'GrimmUserPic', // vue component name
@@ -167,7 +178,9 @@
         },
         components:{
             Carousel,
-            Slide
+            Slide,
+            VApp, // required
+            VImg
         }
 
     };
